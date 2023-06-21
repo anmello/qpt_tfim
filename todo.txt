@@ -1,0 +1,15 @@
+ RUN TO DO:
+
+noiseless
+h = [-0.1,0,0.1]
+OK
+
+noisy
+J=1, h = [-0.2,0,0.2] nshoots 10k
+N=5,6
+
+J=-1 (if time allows) 
+same as above
+
+real HW auckland
+ start with N=5, J=1, h= [-0.2,0,0.2]
