@@ -160,7 +160,7 @@ elif flag == 1:
         options = Options()
         options.simulator = {
             "noise_model": noise_model,
-            "coupling_map": fake_backend.coupling_map,
+            #"coupling_map": fake_backend.coupling_map,
             "seed_simulator": 42
         }
 
@@ -176,9 +176,9 @@ elif flag == 1:
         H = ham_generator(nqubits, h, J)
         result = vqe.compute_minimum_eigenvalue(H, aux_operators=[M])
 
-        # print("Experiment complete.".ljust(30))
-        # print(f"GS: {result.optimal_value}")
-        # print(f"Magn:{result.aux_operators_evaluated}")
+        print("Experiment complete.".ljust(30))
+        print(f"GS: {result.optimal_value}")
+        print(f"Magn:{result.aux_operators_evaluated}")
 
         tmp_title = str(flag) + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + ".txt"
         values = open(tmp_title, "w+")
