@@ -160,7 +160,7 @@ elif flag == 1:
         options = Options()
         options.simulator = {
             "noise_model": noise_model,
-            "coupling_map": fake_backend.coupling_map,
+            #"coupling_map": fake_backend.coupling_map,
             "seed_simulator": 42
         }
 
