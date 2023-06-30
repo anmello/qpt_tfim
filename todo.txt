@@ -13,3 +13,9 @@ same as above
 
 real HW auckland
  start with N=5, J=1, h= [-0.2,0,0.2]
+
+
+UPDATE:
+29/06/23: con noiseless simulation i file si creano quindi in teoria tutto dovrebbe andare. Noiseless gira ma non arriva a conclusione quindi abbassiamo n shoots e n itereazioni. Lato HW qualcosa gira
+30/06/23: problema con ambiente conda, manca qiskit-runtime per testare nuovo backend locale'
+

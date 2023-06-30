@@ -17,6 +17,8 @@ from qiskit.algorithms.minimum_eigensolvers import VQE
 import matplotlib.pyplot as plt
 from qiskit.providers.fake_provider import FakeGeneva, FakeVigo, FakeNairobi, FakeAuckland
 from qiskit_aer.noise import NoiseModel
+
+from qiskit_aer.primitives import Estimator as AerEstimator
 from qiskit_ibm_runtime import QiskitRuntimeService, Estimator, Session, Options
 import argparse
 import datetime
@@ -119,7 +121,8 @@ log = VQELog([],[])
 initial_timestamp = datetime.datetime.now()
 
 service = QiskitRuntimeService()
-backend = "ibmq_qasm_simulator"
+backend = "QasmSimulatorPy"
+#"ibmq_qasm_simulator"
 
 ansatz = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=True)
 
@@ -165,7 +168,7 @@ elif flag == 1:
         }
 
         # Set number of shots, optimization_level and resilience_level
-        options.execution.shots = 5000
+        options.execution.shots = 3000
         options.optimization_level = 3
         options.resilience_level = 2
 
