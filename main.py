@@ -121,17 +121,16 @@ log = VQELog([],[])
 initial_timestamp = datetime.datetime.now()
 
 service = QiskitRuntimeService()
-backend = "QasmSimulatorPy"
-#"ibmq_qasm_simulator"
+backend = "ibmq_qasm_simulator"
 
 ansatz = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=True)
 
-optimizer = SPSA(maxiter=2000)
+optimizer = SPSA(maxiter=1800)
 
 initial_point = np.random.random(ansatz.num_parameters)
 
 if flag == 0:
-    #NOISELESS
+    print('NOISELESS')
     with Session(service=service, backend=backend) as session:
 
         log = VQELog([], [])
@@ -153,7 +152,7 @@ if flag == 0:
         values.close()
 
 elif flag == 1:
-    # NOISY
+    print('NOISY')
     with Session(service=service, backend=backend) as session:
         # Make a noise model
         fake_backend = FakeAuckland()
@@ -194,7 +193,7 @@ elif flag == 2:
     #TODO check here
 
     # REAL HW
-    backend = service.backend("ibm_auckland")
+    backend = service.backend("ibm_cairo")
     with Session(service=service, backend=backend) as session:
         # Make a noise model
         #noise_model = NoiseModel.from_backend(backend)
@@ -203,7 +202,7 @@ elif flag == 2:
         options = Options()
 
         # Set number of shots, optimization_level and resilience_level
-        options.execution.shots = 8000
+        options.execution.shots = 6000
         options.optimization_level = 3
         options.resilience_level = 2
 

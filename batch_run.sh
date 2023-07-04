@@ -1,8 +1,8 @@
 #!/bin/bash
 #   f 0 noiseless simulation, 1 noisy simulation, 2 real backend), J (=1 antiferro, =-1 ferro), B (magnetic field) and n (number of qubits in the system)
+f=2
 J=1
-f=0
-n=5
+n=6
 
 for B in -0.2 0 0.2
 do
