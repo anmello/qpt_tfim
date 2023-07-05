@@ -16,8 +16,8 @@ from qiskit.algorithms import NumPyMinimumEigensolver
 from qiskit.algorithms.minimum_eigensolvers import VQE
 import matplotlib.pyplot as plt
 from qiskit_aer.noise import NoiseModel
-from qiskit.providers.fake_provider import FakeGeneva, FakeVigo, FakeNairobi, FakeAuckland
-
+from qiskit.providers.fake_provider import FakeGeneva, FakeVigo, FakeNairobi, FakeAuckland, FakeCairo
+from qiskit.utils import algorithm_globals
 from qiskit_aer.primitives import Estimator as AerEstimator
 from qiskit_ibm_runtime import QiskitRuntimeService, Estimator, Session, Options
 import argparse
@@ -228,8 +228,8 @@ elif flag == 3:
     print('noisy local')
     seed = 170
     algorithm_globals.random_seed = seed
-
-    device = FakeAuckland()
+    #FakeCairo is V1 fake backend
+    device = FakeCairo()
     coupling_map = device.configuration().coupling_map
     noise_model = NoiseModel.from_backend(device)
 
