@@ -156,7 +156,7 @@ elif flag == 1:
     #https://qiskit.org/ecosystem/ibm-runtime/how_to/noisy_simulators.html
     with Session(service=service, backend=backend) as session:
         # Make a noise model
-        fake_backend = FakeAuckland()
+        fake_backend = FakeCairo() #FakeAuckland() v2 is incompatible with options.simulator below
         noise_model = NoiseModel.from_backend(fake_backend)
 
         # Set options to include the noise model
