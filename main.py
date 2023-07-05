@@ -229,7 +229,7 @@ elif flag == 3:
     seed = 170
     algorithm_globals.random_seed = seed
 
-    device = FakeAuckland()
+    device = FakeCairo()
     coupling_map = device.configuration().coupling_map
     noise_model = NoiseModel.from_backend(device)
 
@@ -246,7 +246,7 @@ elif flag == 3:
     #options.resilience_level = 2
     #NB no error mitigation and traspilation option available locally
     ## This option is currently available for remote simulators and real backends accessed via the Runtime Primitives see https://qiskit.org/ecosystem/ibm-runtime/tutorials/Error-Suppression-and-Error-Mitigation.html
-    
+
     log = VQELog([], [])
     vqe = VQE(
         noisy_estimator, ansatz, optimizer=optimizer, callback=log.update, initial_point=initial_point
