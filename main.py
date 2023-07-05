@@ -15,8 +15,8 @@ from qiskit.providers.basicaer import QasmSimulatorPy  # local simulator
 from qiskit.algorithms import NumPyMinimumEigensolver
 from qiskit.algorithms.minimum_eigensolvers import VQE
 import matplotlib.pyplot as plt
-from qiskit.providers.fake_provider import FakeGeneva, FakeVigo, FakeNairobi, FakeAuckland
 from qiskit_aer.noise import NoiseModel
+from qiskit.providers.fake_provider import FakeGeneva, FakeVigo, FakeNairobi, FakeAuckland
 
 from qiskit_aer.primitives import Estimator as AerEstimator
 from qiskit_ibm_runtime import QiskitRuntimeService, Estimator, Session, Options
@@ -223,6 +223,49 @@ elif flag == 2:
         print((result.aux_operators_evaluated)[0][0], file=values)
 
         values.close()
+
+elif flag == 3:
+    print('noisy local')
+    seed = 170
+    algorithm_globals.random_seed = seed
+
+    device = FakeAuckland()
+    coupling_map = device.configuration().coupling_map
+    noise_model = NoiseModel.from_backend(device)
+
+    noisy_estimator = AerEstimator(
+        backend_options={
+            "method": "density_matrix",
+            "coupling_map": coupling_map,
+            "noise_model": noise_model,
+        },
+        run_options={"seed": seed, "shots": 2000},
+        transpile_options={"seed_transpiler": seed},
+    )
+    #options.optimization_level = 3
+    #options.resilience_level = 2
+    #NB no error mitigation and traspilation option available locally
+    ## This option is currently available for remote simulators and real backends accessed via the Runtime Primitives see https://qiskit.org/ecosystem/ibm-runtime/tutorials/Error-Suppression-and-Error-Mitigation.html
+    
+    log = VQELog([], [])
+    vqe = VQE(
+        noisy_estimator, ansatz, optimizer=optimizer, callback=log.update, initial_point=initial_point
+    )
+
+    M = magnetization(nqubits)
+    H = ham_generator(nqubits, h, J)
+    result = vqe.compute_minimum_eigenvalue(H, aux_operators=[M])
+
+    print("Experiment complete.".ljust(30))
+    print(f"GS: {result.optimal_value}")
+    print(f"Magn:{result.aux_operators_evaluated}")
+
+    tmp_title = str(flag) + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + ".txt"
+    values = open(tmp_title, "w+")
+    print(result.optimal_value, file=values)
+    print(result.aux_operators_evaluated[0][0], file=values)
+
+    values.close()
 
 print(str(datetime.datetime.now() - initial_timestamp))
 
