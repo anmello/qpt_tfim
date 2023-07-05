@@ -205,7 +205,7 @@ elif flag == 2:
         options = Options()
 
         # Set number of shots, optimization_level and resilience_level
-        options.execution.shots = 6000
+        options.execution.shots = 2000
         options.optimization_level = 3
         options.resilience_level = 2
 
@@ -223,7 +223,7 @@ elif flag == 2:
         tmp_title = str(flag) + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + ".txt"
         values = open(tmp_title, "w+")
         print(result.optimal_value, file=values)
-        print((result.aux_operators_evaluated)[0][0], file=values)
+        print(result.aux_operators_evaluated[0][0], file=values)
 
         values.close()
 
@@ -243,12 +243,11 @@ elif flag == 3:
             "coupling_map": coupling_map,
             "noise_model": noise_model,
         },
-        run_options={"seed": seed, "shots": 2000},
+        run_options={"seed": seed, "shots": 3000},
         transpile_options={"seed_transpiler": seed},
     )
-    #options.optimization_level = 3
-    #options.resilience_level = 2
-    #NB no error mitigation and traspilation option available locally
+
+    #NB no error mitigation and transpilation option available locally
     ## This option is currently available for remote simulators and real backends accessed via the Runtime Primitives see https://qiskit.org/ecosystem/ibm-runtime/tutorials/Error-Suppression-and-Error-Mitigation.html
 
     log = VQELog([], [])
