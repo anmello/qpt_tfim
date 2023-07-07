@@ -5,15 +5,13 @@ import numpy as np
 
 # standard Qiskit libraries
 from qiskit import QuantumCircuit, transpile, Aer, IBMQ
-from qiskit.providers.aer import QasmSimulator
-from qiskit.opflow.primitive_ops import PauliSumOp
-from qiskit.providers.aer import AerSimulator
 from qiskit.opflow import Z,I,X
 from qiskit.circuit.library import EfficientSU2
 from qiskit.algorithms.optimizers import SPSA,  COBYLA
-from qiskit.providers.basicaer import QasmSimulatorPy  # local simulator
-from qiskit.algorithms import NumPyMinimumEigensolver
+
 from qiskit.algorithms.minimum_eigensolvers import VQE
+from qiskit.quantum_info import Pauli, SparsePauliOp
+
 import matplotlib.pyplot as plt
 from qiskit_aer.noise import NoiseModel
 from qiskit.providers.fake_provider import FakeGeneva, FakeVigo, FakeNairobi, FakeAuckland, FakeCairo
@@ -50,16 +48,19 @@ nqubits = int(args.nqubits)
 
 # useful functions
 def ham_generator(N, h, J):
-    H = 0
-
+    l = [] #we'll add the terms (term,coef)
     # field term
     for i in range(N):
-        H += h * ((I ^ (i)) ^ (Z) ^ (I ^ (N - i - 1)))
-        # interaction term
+        t = "I"*i + "Z" + "I"*(N-1-i)
+        l.append( (t,h) )
+    # interaction term
     for k in range(N - 1):
-        H += J * ((I ^ (k)) ^ (X ^ X) ^ (I ^ (N - k - 2)))
+        t = "I"*k + "XX" + "I"*(N-2-k)
+        l.append( (t,J) )
     # PBC
-    H += J * ((X) ^ (I ^ (N - 2)) ^ (X))
+    t = "X" + "I"*(N-2) + "X"
+    l.append( (t,J) )
+    H = SparsePauliOp.from_list(l)
     return H
 
 
@@ -95,12 +96,14 @@ def b_derivative(a, b, en, npoints):
 
 # definition magnetization
 def magnetization(N):
-    M = 0
-
+    l=[]
+    coef=1/N
     # field term
     for i in range(N):
-        M += ((I ^ (i)) ^ (X) ^ (I ^ (N - i - 1)))
-    return M / N
+        t = "I"*i + "X" + "I"*(N-1-i)
+        l.append( (t,coef) )
+    M = SparsePauliOp.from_list(l)
+    return M
 
 # Create an object to store intermediate results
 from dataclasses import dataclass
@@ -123,7 +126,7 @@ initial_timestamp = datetime.datetime.now()
 service = QiskitRuntimeService()
 backend = "ibmq_qasm_simulator"
 
-ansatz = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=True)
+ansatz = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=False)
 
 optimizer = SPSA(maxiter=1800)
 
