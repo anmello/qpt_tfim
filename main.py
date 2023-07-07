@@ -193,7 +193,7 @@ elif flag == 1:
         values.close()
 
 elif flag == 2:
-    #TODO check here
+    print('real hardware')
 
     # REAL HW
     backend = service.backend("ibm_cairo")
@@ -207,7 +207,7 @@ elif flag == 2:
         # Set number of shots, optimization_level and resilience_level
         options.execution.shots = 2000
         options.optimization_level = 3
-        options.resilience_level = 2
+        options.resilience_level = 1
 
         log = VQELog([], [])
         vqe = VQE(Estimator(session=session, options=options),
