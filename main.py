@@ -5,7 +5,7 @@ import numpy as np
 
 # standard Qiskit libraries
 from qiskit import QuantumCircuit, transpile, Aer, IBMQ
-from qiskit.opflow import Z,I,X
+#from qiskit.opflow import Z,I,X
 from qiskit.circuit.library import EfficientSU2
 from qiskit.algorithms.optimizers import SPSA,  COBYLA
 
