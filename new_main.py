@@ -85,7 +85,7 @@ ansatz = RealAmplitudes(num_qubits=nqubits, reps=3)
 #ansatz = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=False)
 #ansatz_true = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=True)
 
-optimizer = SPSA(maxiter=200)
+optimizer = SPSA(maxiter=600)
 
 np.random.seed(6)
 initial_point = np.random.random(ansatz.num_parameters)
@@ -112,7 +112,7 @@ options = Options()
 # Set number of shots, optimization_level and resilience_level
 options.execution.shots = 1024
 options.optimization_level = 3
-options.resilience_level = 0
+options.resilience_level = 1
 
 
 if flag == 0:
