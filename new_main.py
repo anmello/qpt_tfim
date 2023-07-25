@@ -18,8 +18,8 @@ import argparse
 import datetime
 '''
    Read from config file.
-   USAGE example: python main.py -f 0 -J 1 -B 0.1 -n 5 -r 2
-   f 0 noiseless simulation, 1 noisy simulation, 2 real backend), J (=1 antiferro, =-1 ferro), h (magnetic field), nqubits (number of qubits in the system) and reps (number of layers in the circuit ansatz)
+   USAGE example: python main.py -f 0 -J 1 -B 0.1 -n 5
+   f 0 noiseless simulation, 1 noisy simulation, 2 real backend), J (=1 antiferro, =-1 ferro), h (magnetic field) and nqubits (number of qubits in the system)
  '''
 
 parser = argparse.ArgumentParser()
@@ -28,10 +28,11 @@ parser.add_argument('-J', '--J', type=float, required=True)
 parser.add_argument('-B', '--magneticfield', type=float, required=True)
 parser.add_argument('-n', '--nqubits', type=int, required=True)
 parser.add_argument('-r', '--reps', type = int, required= True)
+parser.add_argument('-i', '--maxiter', type = int, required= True)
 
 args = parser.parse_args()
 
-print(args.flagnoise, args.J, args.magneticfield, args.nqubits, args.reps)
+print(args.flagnoise, args.J, args.magneticfield, args.nqubits)
 
 flag = int(args.flagnoise)
 
@@ -42,6 +43,8 @@ h = float(args.magneticfield)
 nqubits = int(args.nqubits)
 
 nreps = int(args.reps)
+
+niter = int(args.maxiter)
 
 def ham_generator(N, h, J):
     l = [] #we'll add the terms (term,coef)
@@ -58,7 +61,7 @@ def ham_generator(N, h, J):
     l.append( (t,J) )
     H = SparsePauliOp.from_list(l)
     return H
-
+    
 # definition magnetization
 def magnetization(N):
     l=[]
@@ -88,7 +91,7 @@ ansatz = RealAmplitudes(num_qubits=nqubits, reps=nreps)
 #ansatz = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=False)
 #ansatz_true = EfficientSU2(nqubits, reps=3, entanglement='linear', insert_barriers=True)
 
-optimizer = SPSA(maxiter=600)
+optimizer = SPSA(maxiter=niter)
 
 np.random.seed(6)
 initial_point = np.random.random(ansatz.num_parameters)
@@ -141,14 +144,14 @@ if flag == 0:
 
     print('noisy result for the gs is: ', result.eigenvalue)
 
-    tmp_title = "flag" + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + "_" + str(nreps) + ".txt"
+    tmp_title = "flag" + "_" + str(J) + "_" + str(h) + "_"  + "_" +str(nqubits)+ "_" + str(nreps) + "_" +str(niter)+".txt"
     values = open(tmp_title, "w+")
     print(result.optimal_value, file=values)
     print((result.aux_operators_evaluated)[0][0], file=values)
 
     values.close()
 
-    conv_title = str(flag)+"_"+str(J)+"_"+str(h) + "_" + "_" + str(nqubits) + "_"  + str(nreps) + "_" + "conv" + ".txt"
+    conv_title = str(flag)+"_"+str(J)+"_"+str(h) + "_" + "_" + str(nqubits) + "_"  + str(nreps) + "_"+str(niter) + "_"+ "conv" + ".txt"
 	
     conv = open(conv_title,"w+")
     print(log.values, file = conv)
@@ -186,20 +189,20 @@ elif flag == 1:
 
     print('noisy result for the gs is: ', result.eigenvalue)
 
-    tmp_title = "flag" + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + "_" + str(nreps) + ".txt"
+    tmp_title = "flag" + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + ".txt"
     values = open(tmp_title, "w+")
     print(result.optimal_value, file=values)
     print((result.aux_operators_evaluated)[0][0], file=values)
 
     values.close()
 
-    conv_title = str(flag)+"_"+str(J)+"_"+str(h) + "_" + "_" + str(nqubits) + "_"  + str(nreps) + "_" + "conv" + ".txt"
+    conv_title = str(flag)+"_"+str(J)+"_"+str(h) + "_" + "_" + str(nqubits) + "_"  + str(nreps) + "_"+str(niter) + "_"+"conv" + ".txt"
 	
     conv = open(conv_title,"w+")
     print(log.values, file = conv)
 	
     conv.close()
-
+    
 elif flag == 2:
     print('real hardware')
 
@@ -226,18 +229,18 @@ elif flag == 2:
         # print(f"GS: {result.optimal_value}")
         # print(f"Magn:{result.aux_operators_evaluated}")
 
-        tmp_title = "flag" + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + "_" + str(nreps) + ".txt"
+        tmp_title = str(flag) + "_" + str(J) + "_" + str(h) + "_" + "_" + str(nqubits) + ".txt"
         values = open(tmp_title, "w+")
         print(result.optimal_value, file=values)
         print((result.aux_operators_evaluated)[0][0], file=values)
 
         values.close()
+        conv_title = str(flag)+"_"+str(J)+"_"+str(h) + "_" + "_" + str(nqubits) + "_"  + str(nreps) + "_"+str(niter) + "_"+"conv" + ".txt"
+	
+        conv = open(conv_title,"w+")
+        print(log.values, file = conv)
+	
+        conv.close()
 
-    	conv_title = str(flag)+"_"+str(J)+"_"+str(h) + "_" + "_" + str(nqubits) + "_"  + str(nreps) + "_" + "conv" + ".txt"
-	
-    	conv = open(conv_title,"w+")
-    	print(log.values, file = conv)
-	
-    	conv.close()
 
 
