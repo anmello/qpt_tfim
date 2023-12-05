@@ -1,0 +1,26 @@
+2 -1.0 -0.3 6
+correct solution is:  -6.135949985327444
+real hardware
+Traceback (most recent call last):
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit/algorithms/minimum_eigensolvers/vqe.py", line 254, in evaluate_energy
+    estimator_result = job.result()
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/runtime_job.py", line 228, in result
+    raise RuntimeJobFailureError(
+qiskit_ibm_runtime.exceptions.RuntimeJobFailureError: "Unable to retrieve job result. BACKENDPROPERTYERROR: 'UNABLE TO PROCESS BACKEND PROPERTIES."
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/mgrossi/code_collection/qpt_tfim/new_main.py", line 226, in <module>
+    result = vqe.compute_minimum_eigenvalue(H, aux_operators=[M])
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit/algorithms/minimum_eigensolvers/vqe.py", line 191, in compute_minimum_eigenvalue
+    optimizer_result = self.optimizer.minimize(
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit/algorithms/optimizers/spsa.py", line 514, in minimize
+    get_eta, get_eps = self.calibrate(fun, x0, max_evals_grouped=self._max_evals_grouped)
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit/algorithms/optimizers/spsa.py", line 335, in calibrate
+    losses = _batch_evaluate(loss, points, max_evals_grouped)
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit/algorithms/optimizers/spsa.py", line 748, in _batch_evaluate
+    results += _as_list(function(batch))
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit/algorithms/minimum_eigensolvers/vqe.py", line 256, in evaluate_energy
+    raise AlgorithmError("The primitive job to evaluate the energy failed!") from exc
+qiskit.algorithms.exceptions.AlgorithmError: 'The primitive job to evaluate the energy failed!'
