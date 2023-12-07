@@ -1,0 +1,29 @@
+2 -1.0 0.3 5
+correct solution is:  -5.113788665585299
+Traceback (most recent call last):
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/api/session.py", line 306, in request
+    response.raise_for_status()
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://api.quantum.ibm.com/runtime/backends?provider=ibm-q-education%2Feth-zurich-ibm-1%2Fcern-workshop
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/mgrossi/code_collection/qpt_tfim/new_main.py", line 86, in <module>
+    service = QiskitRuntimeService(channel='ibm_quantum')
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/qiskit_runtime_service.py", line 213, in __init__
+    for backend_name in hgp.backends:
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/hub_group_project.py", line 60, in backends
+    self._backends = self._discover_remote_backends()
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/hub_group_project.py", line 78, in _discover_remote_backends
+    backends = self._runtime_client.list_backends(self.name)
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/api/clients/runtime.py", line 350, in list_backends
+    return self._api.backends(hgp=hgp)["devices"]
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/api/rest/runtime.py", line 281, in backends
+    return self.session.get(url, params={"provider": hgp}).json()
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/requests/sessions.py", line 602, in get
+    return self.request("GET", url, **kwargs)
+  File "/data/mgrossi/anaconda3/envs/genova/lib/python3.9/site-packages/qiskit_ibm_runtime/api/session.py", line 327, in request
+    raise IBMNotAuthorizedError(message) from ex
+qiskit_ibm_runtime.exceptions.IBMNotAuthorizedError: '401 Client Error: Unauthorized for url: https://api.quantum.ibm.com/runtime/backends?provider=ibm-q-education%2Feth-zurich-ibm-1%2Fcern-workshop. {"errors":[{"code":1201,"message":"Invalid credentials.","solution":"Verify your credentials and try again.","more_info":"https://cloud.ibm.com/apidocs/quantum-computing#error-handling"}],"trace":"clo8ceod27giap4qriqg"}'
